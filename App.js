@@ -7,43 +7,40 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, Text, View} from 'react-native';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import Home from "./src/components/views/Home.js";
+import Login from "./src/components/views/Login.js";
+import Firebase from "./src/firebase/Firebase.js";
+import Register from "./src/components/views/Register";
+import Chat from "./src/components/views/Chat";
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+// tao stack chua cac view components
+const MainNavigator = createStackNavigator({
+      Home: {screen: Home},
+      Login: {screen: Login},
+      Register: {screen: Register},
+      Chat: {screen: Chat},
+    },
+    {
+      initialRouteName: 'Login',
+    }
+);
+// console.log(MainNavigator);
+const AppContainer = createAppContainer(MainNavigator);
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends React.Component {
+  constructor(props){
+    super(props);
+
+    Firebase.initialise();
+  }
+
   render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
+    return(
+        <AppContainer />
+
     );
+
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
